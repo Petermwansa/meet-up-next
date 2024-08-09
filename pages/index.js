@@ -51,7 +51,6 @@ function HomePage(props) {
     )
 }
 
-
 // // this can be used to revalidate the data on the server side everytime there is a change 
 // // use this method if data changes multiple times every second 
 // export async function getServerSideProps(context) {
@@ -72,7 +71,8 @@ function HomePage(props) {
 
 
 
-// by default next js generates the pages statically but if you need to wait for data you can do so by exporting a special function 
+// by default next js generates the pages statically but if you need
+// to wait for data you can do so by exporting a special function 
 export async function getStaticProps() {
     // the code here never ends up on the client side because it is executed in the build 
     //you can fetch and read data here 
