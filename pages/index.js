@@ -1,6 +1,8 @@
 import { ApiError } from "next/dist/server/api-utils";
 import MeetupList from "../components/meetups/MeetupList";
 import { MongoClient } from "mongodb";
+import Head from "next/head";
+import { Fragment } from "react";
 
 
 
@@ -18,9 +20,13 @@ function HomePage(props) {
 
 
     return (
-        <>
+        <Fragment>
+            <Head>
+                <title>Next Meetups</title>
+                <meta name="description" content="browse a list of the meetups"></meta>
+            </Head>
             <MeetupList meetups={props.meetups} />
-        </>
+        </Fragment>
     )
 }
 
