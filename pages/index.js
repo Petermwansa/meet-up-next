@@ -1,33 +1,6 @@
+import { ApiError } from "next/dist/server/api-utils";
 import MeetupList from "../components/meetups/MeetupList";
-
-
-
-const DUMMY_MEETUPS = [
-    {
-        id: 'm1',
-        title: 'A first meetup',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/%CE%A3%CE%B1%CE%B3%CF%81%CE%AC%CE%B4%CE%B1_%CE%A6%CE%B1%CE%BC%CE%AF%CE%BB%CE%B9%CE%B1_2941_%28cropped%29.jpg/800px-%CE%A3%CE%B1%CE%B3%CF%81%CE%AC%CE%B4%CE%B1_%CE%A6%CE%B1%CE%BC%CE%AF%CE%BB%CE%B9%CE%B1_2941_%28cropped%29.jpg',
-        description: 'Our first meetup will be in Barcelona, Spain'
-    },
-    {
-        id: 'm2',
-        title: 'A second meetup',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Le_casino_de_Monte-Carlo.JPG/1024px-Le_casino_de_Monte-Carlo.JPG',
-        description: 'Our first meetup will be in Monaco'
-    },
-    {
-        id: 'm3',
-        title: 'A third meetup',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Cidade_Maravilhosa.jpg/1024px-Cidade_Maravilhosa.jpg',
-        description: 'Our first meetup will be in Rio de Janeiro, Brazil'
-    },
-    {
-        id: 'm4',
-        title: 'A fourth meetup',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Palace_Bridge_SPB_%28img2%29.jpg/1024px-Palace_Bridge_SPB_%28img2%29.jpg',
-        description: 'Our first meetup will be in Saint Petersburg, Russia'
-    },
-]
+import { MongoClient } from "mongodb";
 
 
 
@@ -74,15 +47,35 @@ function HomePage(props) {
 // by default next js generates the pages statically but if you need
 // to wait for data you can do so by exporting a special function 
 export async function getStaticProps() {
+
+    // here we fetch the data from the Api
+    // Uo90nWzMpoicRTeG 
+    const client = await MongoClient.connect(
+        'mongodb+srv://user_1:Uo90nWzMpoicRTeG@meetupnext0.xpkke.mongodb.net/meetups?retryWrites=true&w=majority&appName=MeetupNext0'
+    );
+    const db = client.db();
+
+    const meetupsCollection = db.collection('meetups');
+
+    const meetups = await meetupsCollection.find().toArray();
+
+    client.close();
+
+
     // the code here never ends up on the client side because it is executed in the build 
     //you can fetch and read data here 
     // you always return an obj here 
     return {
         props: {
-            meetups: DUMMY_MEETUPS
+            meetups: meetups.map(meetup => ({
+                title: meetup.title,
+                address: meetup.address,
+                image: meetup.image,
+                id: meetup._id.toString(),
+            }))
         },
         // if the data changes frequently we add the following to revalidate the data after every specified timeframe
-        revalidate: 2
+        revalidate: 1
     }
 }
 

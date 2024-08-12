@@ -11,6 +11,7 @@ function MeetupDetails() {
     )
 }
 
+
 // id describes the dynamic segment values for which the page should be regenerated
 export async function getStaticPaths() {
     return {
