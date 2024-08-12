@@ -81,7 +81,7 @@ export async function getStaticProps() {
             }))
         },
         // if the data changes frequently we add the following to revalidate the data after every specified timeframe
-        revalidate: 1
+        revalidate: 10
     }
 }
 
